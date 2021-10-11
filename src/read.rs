@@ -25,7 +25,7 @@ impl<'a> File<'a> {
     //!     let file_op = File::new(Path::new("path/to"));
     //!
     //!     if let Some(file_op) = file_op {
-    //!         ...
+    //!
     //!     }
     //!     Ok(())
     //! }
