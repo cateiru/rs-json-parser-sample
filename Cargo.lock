@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "rs-json-parser-sample"
+name = "json_parser"
 version = "0.1.0"
