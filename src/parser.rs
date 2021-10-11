@@ -1,10 +1,30 @@
-use crate::read::File;
-use std::{error::Error, path::Path};
+use crate::body::Body;
+use crate::symbol;
 
-pub fn parse(path: &Path) -> Result<(), Box<dyn Error>> {
-    let file_op = File::new(path);
+pub fn start(body: &mut Body) -> Option<()> {
+    let target = body.pop();
 
-    if let Some(file_op) = file_op {}
+    if symbol::is_start_brace(target) {
+        // {
+        start_brace(body)
+    } else if symbol::is_start_bracket(target) {
+        // [
+        start_bracket(body)
+    } else if symbol::is_blank(target) {
+        // sparse
+        start(body)
+    } else if symbol::is_next(target) {
+        // newline
+        start(body)
+    } else {
+        None
+    }
+}
 
-    Ok(())
+fn start_brace(body: &mut Body) -> Option<()> {
+    None
+}
+
+fn start_bracket(body: &mut Body) -> Option<()> {
+    None
 }
