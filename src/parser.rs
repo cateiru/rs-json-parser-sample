@@ -2,7 +2,7 @@ use crate::body::Body;
 use crate::symbol;
 
 pub fn start(body: &mut Body) -> Option<()> {
-    let target = body.pop();
+    let target = body.pop()?;
 
     if symbol::is_start_brace(target) {
         // {

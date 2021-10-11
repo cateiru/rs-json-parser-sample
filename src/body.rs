@@ -35,33 +35,37 @@ impl<'a> Body<'a> {
     /// If there are letters or numbers enclosed in double quotation marks, store them in text_buffer.
     /// Check exist_text for how to check the buffer.
     /// Call get_text() to get this.
-    pub fn pop(&mut self) -> &u8 {
-        let target = &self.body[self.start_index];
-        self.start_index += 1;
-
-        // Buffers a string or number string.
-        if self.is_text {
-            self.push_text(&target);
-            self.pop()
-        } else if symbol::is_double_quotation(&target) {
-            self.exist_text = true;
-
-            // If enclosed in double quotes, it is a string.
-            self.is_text = !self.is_text;
-            self.pop()
-        } else if symbol::is_number(&target) {
-            self.exist_text = true;
-
-            // number.
-            // Note: Numbers in double quotes are not counted.
-            self.push_text(&target);
-            self.pop()
+    pub fn pop(&mut self) -> Option<&u8> {
+        if self.body.len() <= self.start_index {
+            None
         } else {
-            if self.exist_text {
-                self.exist_text = false;
-            }
+            let target = &self.body[self.start_index];
+            self.start_index += 1;
 
-            target
+            // Buffers a string or number string.
+            if self.is_text {
+                self.push_text(&target);
+                self.pop()
+            } else if symbol::is_double_quotation(&target) {
+                self.exist_text = true;
+
+                // If enclosed in double quotes, it is a string.
+                self.is_text = !self.is_text;
+                self.pop()
+            } else if symbol::is_number(&target) {
+                self.exist_text = true;
+
+                // number.
+                // Note: Numbers in double quotes are not counted.
+                self.push_text(&target);
+                self.pop()
+            } else {
+                if self.exist_text {
+                    self.exist_text = false;
+                }
+
+                Some(target)
+            }
         }
     }
 
@@ -94,9 +98,30 @@ mod tests {
         let mut body = Body::new(sample_txt);
 
         for byte in sample_txt_bytes {
-            assert_eq!(byte, body.pop());
+            assert_eq!(byte, body.pop().unwrap());
         }
 
         assert_eq!(text_length, body.start_index);
+    }
+
+    #[test]
+    fn buffer_works() {
+        let sample_txt = "hogehoge \"fuga\"foo";
+
+        let mut body = Body::new(sample_txt);
+
+        loop {
+            let result = body.pop();
+
+            match result {
+                Some(_) => {
+                    if body.exist_text {
+                        let text = body.get_text().unwrap();
+                        assert_eq!("fuga", text);
+                    }
+                }
+                None => break,
+            }
+        }
     }
 }
