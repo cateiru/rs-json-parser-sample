@@ -102,3 +102,91 @@ fn comparison_symbol(target: &u8, symbol: &u8) -> bool {
         false
     }
 }
+
+/// Check if the number.
+/// 0 to 9 and `-`
+///
+/// TODO: `-` must be at the beginning of the number.
+pub fn is_number(target: &u8) -> bool {
+    if (*target >= 48u8 && *target < 58u8) || *target == 45u8 {
+        true
+    } else {
+        false
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::symbol;
+
+    #[test]
+    fn brace() {
+        let braces = "{}".as_bytes();
+
+        assert_eq!(true, symbol::is_start_brace(&braces[0]));
+        assert_eq!(false, symbol::is_start_brace(&braces[1]));
+
+        assert_eq!(false, symbol::is_end_brace(&braces[0]));
+        assert_eq!(true, symbol::is_end_brace(&braces[1]));
+    }
+
+    #[test]
+    fn bracket() {
+        let brackets = "[]".as_bytes();
+
+        assert_eq!(true, symbol::is_start_bracket(&brackets[0]));
+        assert_eq!(false, symbol::is_start_bracket(&brackets[1]));
+
+        assert_eq!(false, symbol::is_end_bracket(&brackets[0]));
+        assert_eq!(true, symbol::is_end_bracket(&brackets[1]));
+    }
+
+    #[test]
+    fn comma() {
+        let comma = ",.".as_bytes();
+
+        assert_eq!(true, symbol::is_comma(&comma[0]));
+        assert_eq!(false, symbol::is_comma(&comma[1]));
+    }
+
+    #[test]
+    fn colon() {
+        let colon = ":;".as_bytes();
+
+        assert_eq!(true, symbol::is_colon(&colon[0]));
+        assert_eq!(false, symbol::is_colon(&colon[1]));
+    }
+
+    #[test]
+    fn double_quotation() {
+        let dq = "\"\'".as_bytes();
+
+        assert_eq!(true, symbol::is_double_quotation(&dq[0]));
+        assert_eq!(false, symbol::is_double_quotation(&dq[1]));
+    }
+
+    #[test]
+    fn blank() {
+        let whitespace = " a".as_bytes();
+
+        assert_eq!(true, symbol::is_blank(&whitespace[0]));
+        assert_eq!(false, symbol::is_blank(&whitespace[1]));
+    }
+
+    #[test]
+    fn newline() {
+        let newline = "\n\t".as_bytes();
+
+        assert_eq!(true, symbol::is_next(&newline[0]));
+        assert_eq!(false, symbol::is_next(&newline[1]));
+    }
+
+    #[test]
+    fn numbers() {
+        let numbers = "1234567890-".as_bytes();
+
+        for element in numbers {
+            assert_eq!(true, symbol::is_number(element));
+        }
+    }
+}
