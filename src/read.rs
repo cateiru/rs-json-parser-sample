@@ -4,41 +4,42 @@ pub struct File<'a> {
     path: &'a Path,
 }
 
-/// File operation class.
-///
-/// ## Feature
-///
-/// - Read all target file.
-/// - Read line target file.
-///
-/// ## Example
-///
-/// ```rust
-/// use json_parser::File;
-/// use std::{
-///     error::Error,
-///     path::Path,
-/// };
-///
-/// fn main() -> Result<(), Box<dyn Error>> {
-///     let file_op = File::new(Path::new("path/to"));
-///
-///     if let Some(file_op) = file_op {
-///         ...
-///     }
-///     Ok(())
-/// }
-/// ```
 impl<'a> File<'a> {
+    //! File operation class.
+    //!
+    //! ## Feature
+    //!
+    //! - Read all target file.
+    //! - Read line target file.
+    //!
+    //! ## Example
+    //!
+    //! ```rust
+    //! use json_parser::File;
+    //! use std::{
+    //!     error::Error,
+    //!     path::Path,
+    //! };
+    //!
+    //! fn main() -> Result<(), Box<dyn Error>> {
+    //!     let file_op = File::new(Path::new("path/to"));
+    //!
+    //!     if let Some(file_op) = file_op {
+    //!         ...
+    //!     }
+    //!     Ok(())
+    //! }
+    //! ```
+
     /// Create instance of File class.
     ///
     /// ## Arguments
     ///
-    /// - path: &'a Path - target file path. Must be file not dir.
+    /// - `path` - target file path. Must be file not dir.
     ///
     /// ## Returns
     ///
-    /// - Option<Self> - Instance. Returns `None` if path of arguments not file path.
+    /// Instance. Returns `None` if path of arguments not file path.
     pub fn new(path: &'a Path) -> Option<Self> {
         match path.exists() && path.is_file() {
             true => Some(Self { path: path }),
@@ -50,7 +51,7 @@ impl<'a> File<'a> {
     ///
     /// ## Returns
     ///
-    /// - io::Result<String> - file data.
+    /// file data.
     ///
     /// ### Example
     ///
@@ -76,7 +77,7 @@ impl<'a> File<'a> {
     ///
     /// ## Returns
     ///
-    /// io::Result<File> - file data.
+    /// file data.
     ///
     /// ## Example
     ///
