@@ -42,29 +42,34 @@ impl<'a> Body<'a> {
             let target = &self.body[self.start_index];
             self.start_index += 1;
 
-            // Buffers a string or number string.
-            if self.is_text {
-                self.push_text(&target);
-                self.pop()
-            } else if symbol::is_double_quotation(&target) {
-                self.exist_text = true;
-
-                // If enclosed in double quotes, it is a string.
-                self.is_text = !self.is_text;
-                self.pop()
-            } else if symbol::is_number(&target) {
-                self.exist_text = true;
-
-                // number.
-                // Note: Numbers in double quotes are not counted.
-                self.push_text(&target);
+            if symbol::is_blank(&target) || symbol::is_next(&target) {
+                // Ignore spaces and line breaks.
                 self.pop()
             } else {
-                if self.exist_text {
-                    self.exist_text = false;
-                }
+                // Buffers a string or number string.
+                if self.is_text {
+                    self.push_text(&target);
+                    self.pop()
+                } else if symbol::is_double_quotation(&target) {
+                    self.exist_text = true;
 
-                Some(target)
+                    // If enclosed in double quotes, it is a string.
+                    self.is_text = !self.is_text;
+                    self.pop()
+                } else if symbol::is_number(&target) {
+                    self.exist_text = true;
+
+                    // number.
+                    // Note: Numbers in double quotes are not counted.
+                    self.push_text(&target);
+                    self.pop()
+                } else {
+                    if self.exist_text {
+                        self.exist_text = false;
+                    }
+
+                    Some(target)
+                }
             }
         }
     }
