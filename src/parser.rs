@@ -1,7 +1,8 @@
 use crate::body::Body;
 use crate::symbol;
+use crate::value;
 
-pub fn start(body: &mut Body) -> Option<()> {
+pub fn start(body: &mut Body) -> Option<Box<dyn value::Node>> {
     let target = body.pop()?;
 
     if symbol::is_start_brace(target) {
@@ -21,10 +22,10 @@ pub fn start(body: &mut Body) -> Option<()> {
     }
 }
 
-fn start_brace(body: &mut Body) -> Option<()> {
+fn start_brace(body: &mut Body) -> Option<Box<dyn value::Node>> {
     None
 }
 
-fn start_bracket(body: &mut Body) -> Option<()> {
+fn start_bracket(body: &mut Body) -> Option<Box<dyn value::Node>> {
     None
 }

@@ -1,7 +1,7 @@
 use std::{fs, fs::File as FsFile, io, path::Path};
 
 pub struct File<'a> {
-    path: &'a Path,
+    pub path: &'a Path,
 }
 
 impl<'a> File<'a> {

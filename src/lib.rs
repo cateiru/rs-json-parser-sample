@@ -1,4 +1,5 @@
 mod body;
+mod error;
 mod file;
 mod json;
 mod parser;
